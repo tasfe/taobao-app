@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>成交动态</title>
+<script type="text/javascript">
+
+	var cNo=0;   //当前对象
+	var count=0;  //对象总数
+	var scrollHeight=0;
+	var flag=false;
+	var hLimit=0;     //显示部分的高度
+	var height=360;   //页面显示高度
+	
+	function insertElement(){
+		if(cNo>count){flag=true;cNo=1;}
+		if(flag){
+			var srlText=$('#wrapcon li:last-child').html();
+			var id=$('#wrapcon li:last-child').attr('id');
+			$('#wrapcon li:last-child').remove();
+			$('#wrapcon').prepend('<li id="'+id+'" style="width: 185px; padding:20px 0px;border-bottom:1px dotted #000;">'+srlText+'</li>');
+			var srlHeight=$('#'+id).height();
+			var srlPt=parseInt($('#'+id).css('paddingTop'));
+			var srlPb=parseInt($('#'+id).css('paddingBottom'));
+			scrollHeight=scrollHeight+srlHeight+srlPt+srlPb;
+			$('#'+id).css('opacity','0');
+			$('#wrapcon').css('top',-scrollHeight);
+
+		}
+		
+			var ielHeight=$('#'+cNo).height();
+			var ielPt=parseInt($('#'+cNo).css('paddingTop'));
+			var ielPb=parseInt($('#'+cNo).css('paddingBottom'));
+			scrollHeight=scrollHeight-(ielHeight+ielPt+ielPb);
+			$('#wrapcon').animate({'top':-scrollHeight},800);
+			$('#'+cNo).animate({'opacity':1},7000);
+			cNo++;
+			toHandle=setTimeout('insertElement()',5000);
+
+
+		
+	}
+	
+	function init(){
+		var pt=pb=0;
+		count=$('#wrapcon li').length;
+		for(i=1;i<count+1;i++){
+			h=$('#'+i).height();    
+			pt=parseInt($('#'+i).css('paddingTop'));
+			pb=parseInt($('#'+i).css('paddingBottom'));
+			hLimit+=h+pt+pb;
+			if(hLimit>height){
+				cNo=i;
+				break;
+			}
+		}
+		if(hLimit<=height)return;
+		for(i=cNo;i<count+1;i++){
+			ch=$('#'+i).height();
+			cpt=parseInt($('#'+i).css('paddingTop'));
+			cpb=parseInt($('#'+i).css('paddingBottom'));
+			scrollHeight+=ch+cpt+cpb;
+			$('#'+i).css({'opacity':'0'});
+		}
+		$('#wrapcon').css('top',-scrollHeight);
+		insertElement();
+	}
+	
+	$(function(){
+		init();
+		
+	});
+</script>
+</head>
+<body>
+<div style="background:#ce0000;width:195px;height:405px;">
+	<div style="text-align:center;color:#fff;padding:10px 0px;">成交动态</div>
+	<div id="con" style="position:relative;background:#fff;height:360px;overflow:hidden;width:187px;margin:0 auto;">
+		<ul id="wrapcon" style="position:absolute;top:0px;list-style-type:none;margin:0px;padding:0px;">
+			<li id="4" style="width: 185px; padding:20px 0px;border-bottom:1px dotted #000;">5小时47分钟前，<span style="color:#CECF00;">tb2758830</span>拍下了<span style="color:red;">小兔子 2011韩版女装 休闲 情侣装 t恤时尚短袖情侣t恤 夏装 + 秋装上新 长袖 圆领 情侣装PLay 川久保龄 潮人男女装批发 + 秋装上新 长袖 圆领情侣装PLay 川久保玲 潮人男女装批发</span></li>
+			<li id="3" style="width: 185px; padding:20px 0px;border-bottom:1px dotted #000;">8小时47分钟前，<span style="color:#CECF00;">tb571895_11</span>拍下了<span style="color:red;">2011夏装情侣装韩国情侣t恤韩版情侣装短袖潮流时尚女【秒杀】</span></li>
+			<li id="2" style="width:185px;padding:20px 0px;border-bottom:1px dotted #000;">8小时50分钟前，<span style="color:#CECF00;">tb571895_11</span>拍下了<span style="color:red;">2011夏装情侣装韩国情侣t恤韩版情侣装短袖潮流时尚女【秒杀】</span></li>
+			<li id="1" style="width:185px;padding:20px 0px;">2小时3分钟前，<span style="color:#CECF00;">可以爱你77</span>拍下了<span style="color:red;">2011夏装新款时尚女 情侣t恤 韩版 情侣装 短袖 【心心相印】 秒杀</span></li>
+		</ul>
+	</div>
+
+</div>
+</body>
+</html>
